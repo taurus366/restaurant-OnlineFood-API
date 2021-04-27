@@ -43,11 +43,11 @@ public class Engine implements CommandLineRunner {
         // USER place ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
         User user = new User();
-        user.setAddress("testAddress");
-        user.setFullName("ali zinal22222222222");
+        user.setAddress("admin address");
+        user.setFullName("ADMIN");
         user.setUsername("taurus366");
         user.setPassword("1234");
-        user.setPhoneNumber("123456789");
+        user.setPhoneNumber("0894398978");
         user.setRole(Role.ADMIN);
         session.setUser(user);
         user.setSession(session);
@@ -92,7 +92,21 @@ public class Engine implements CommandLineRunner {
         foodService.postFood(food4);
         foodService.postFood(food5);
 
+    // Client profile ------------------------------
+        Session session2 = new Session();
+        session2.setAuthToken("testToken22");
+        session2.setCreatedTime(new Timestamp(System.currentTimeMillis()));
 
+        User user2 = new User();
+        user2.setAddress("street seventy nine ,number 9");
+        user2.setFullName("Test user");
+        user2.setUsername("test");
+        user2.setPassword("1234");
+        user2.setPhoneNumber("0894397894");
+        user2.setRole(Role.CLIENT);
+        session2.setUser(user2);
+        user2.setSession(session2);
+        userService.postUser(user2);
 
     }
 }
