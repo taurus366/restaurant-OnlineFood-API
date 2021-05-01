@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class ConfirmOrderImpl implements ConfirmOrderService {
@@ -22,5 +24,10 @@ public class ConfirmOrderImpl implements ConfirmOrderService {
     @Override
     public void postConfirmOrder(ConfirmedOrder confirmedOrder) {
         confirmOrderRepository.save(confirmedOrder);
+    }
+
+    @Override
+    public List<ConfirmedOrder> getConfirmOrderByDate(String date) {
+        return confirmOrderRepository.findAllByConfirmDateContaining(date);
     }
 }
