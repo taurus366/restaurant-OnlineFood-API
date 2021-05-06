@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.tournament.restaurant.data.entities.ConfirmedOrder;
 import com.tournament.restaurant.data.entities.Role;
+import com.tournament.restaurant.data.entities.Session;
 import com.tournament.restaurant.data.entities.User;
 import com.tournament.restaurant.data.service.ConfirmOrderService;
 import com.tournament.restaurant.data.service.SessionService;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping(value = "/confirm")
@@ -55,6 +58,25 @@ public class ConfirmOrderController {
 
         }
         return new ResponseEntity<>(gson.toJson("Моля влезте в системата като админ!"),new HttpHeaders(),HttpStatus.UNAUTHORIZED);
+
+    }
+
+    @RequestMapping(value = "/dates",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getAllConfirmedOrdersDate(@RequestBody String json){
+        String authToken = gson.fromJson(json, JsonObject.class).get("authToken").getAsString();
+        Session session = sessionService.getSessionByToken(authToken);
+        if (session != null && session.getUser().getRole().equals(Role.ADMIN)){
+            List<String> list = new LinkedList<>();
+            confirmOrderService.getAllConfirms().forEach(line -> {
+                System.out.println(line.getConfirmDate());
+                if (!list.contains(line.getConfirmDate().substring(0, 10))){
+                    list.add(line.getConfirmDate().substring(0, 10));
+                }
+            });
+
+            return new ResponseEntity<>(gson.toJson(list),new HttpHeaders(),HttpStatus.OK);
+        }
+        return new ResponseEntity<>(gson.toJson("Моля влезте като администратор"),new HttpHeaders(),HttpStatus.UNAUTHORIZED);
 
     }
 }
